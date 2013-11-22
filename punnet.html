@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Punnet Square Calculator</title>
+    <style>
+
+        td {
+            font-size: xx-large;
+            text-align: center;
+            vertical-align: middle;
+            height: 160px;
+            width: 160px;
+            border: black solid;
+            border-width: 2px;
+        }
+
+
+        
+    </style>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+</head>
+
+<body onload="init()">
+
+<h1>Punnet Square Calculator</h1>
+
+<br/>
+
+Dominant Allele Symbol: <input id="dominant_allele_char" type="text" maxlength="1" value="A" onchange="valAlleleSym()"/> <br/>
+Dominant Phenotype: <input id="dominant_phenotype" type="text" value="Tall">    <br/>
+Recessive Allele Symbol: <span id="recessive_allele_char">a</span>      <br/>
+Recessive Phenotype: <input id="recessive_phenotype" type="text" value="Short"/>
+<br/>
+<p class="allele2">Male Allele 1 Dominant? <input id="m_allele1" type="checkbox" checked="true" onchange="update()"/>
+<br/>Male Allele 2 Dominant? <input id="m_allele2" type="checkbox" checked="true" onchange="update()"/></p>
+<span class="allele2"> Female Allele 1 Dominant? <input id="f_allele1" type="checkbox" checked="true" onchange="update()"/>
+<br/>Female Allele 2 Dominant? <input id="f_allele2" type="checkbox" checked="true" onchange="update()"/> </span>  <br/>
+<br/>
+<table>
+    <tr><td id="square1">x</td><td id="square2">x</td></tr>
+    <tr><td id="square3">x</td><td id="square4">x</td></tr>
+</table>
+<br/>
+
+Genotype <span id="dom_dom_allele"></span>: <span id="dom_dom_value"></span>%   <br/>
+Genotype <span id="dom_rec_allele"></span>: <span id="dom_rec_value"></span>%   <br/>
+Genotype <span id="rec_rec_allele"></span>: <span id="rec_rec_value"></span>%    <br/>
+<br/>
+
+Phenotype "<span id="dom_pheno"></span>": <span id="dom_pheno_val"></span>%   <br/>
+Phenotype "<span id="rec_pheno"></span>": <span id="rec_pheno_val"></span>%   <br/>
+
+<script >
+
+    function init() {
+        valAlleleSym()
+        update()
+    }
+
+    function valAlleleSym() {
+
+        curr_char = $("#dominant_allele_char").val();
+
+        if (curr_char.length < 1)
+            $("#dominant_allele_char").val("A");
+        else
+            $("#dominant_allele_char").val(curr_char.toUpperCase());
+
+        $("#recessive_allele_char").text($("#dominant_allele_char").val().toLowerCase());
+
+        $("#dom_dom_allele").text($("#dominant_allele_char").val() + $("#dominant_allele_char").val())
+        $("#dom_rec_allele").text($("#dominant_allele_char").val() + $("#recessive_allele_char").text())
+        $("#rec_rec_allele").text($("#recessive_allele_char").text() + $("#recessive_allele_char").text())
+
+        $("#dom_pheno").text($("#dominant_phenotype").val());
+        $("#rec_pheno").text($("#recessive_phenotype").val());
+
+        update();
+
+    }
+
+
+    function update() {
+
+
+        dom_dom = 0
+        dom_rec = 0
+        rec_rec = 0
+
+        square_chars = ""
+        is_first_allele_dominant = true
+        is_second_allele_dominant = true
+
+        //Calculate square 1
+        if ($("#m_allele1").prop('checked') == true)
+            square_chars = square_chars + ($("#dominant_allele_char").val())
+        else {
+            square_chars = square_chars + ($("#recessive_allele_char").text())
+            is_first_allele_dominant = false
+        }
+        if ($("#f_allele1").prop('checked') == true)
+            square_chars =  ($("#dominant_allele_char").val()) + square_chars
+        else {
+            square_chars = square_chars + ($("#recessive_allele_char").text())
+            is_second_allele_dominant = false
+        }
+
+        if (is_first_allele_dominant && is_second_allele_dominant)
+            dom_dom += 25;
+        else if (is_first_allele_dominant || is_second_allele_dominant)
+            dom_rec += 25;
+        else
+            rec_rec += 25;
+
+        $("#square1").text(square_chars);
+
+
+        square_chars = ""
+        is_first_allele_dominant = true
+        is_second_allele_dominant = true
+
+        //Calculate square 2
+        if ($("#m_allele2").prop('checked') == true)
+            square_chars = square_chars + ($("#dominant_allele_char").val())
+        else {
+            square_chars = square_chars + ($("#recessive_allele_char").text())
+            is_first_allele_dominant = false
+        }
+        if ($("#f_allele1").prop('checked') == true)
+            square_chars = ($("#dominant_allele_char").val()) + square_chars
+        else {
+            square_chars = square_chars + ($("#recessive_allele_char").text())
+            is_second_allele_dominant = false
+        }
+        $("#square2").text(square_chars);
+
+        if (is_first_allele_dominant && is_second_allele_dominant)
+            dom_dom += 25;
+        else if (is_first_allele_dominant || is_second_allele_dominant)
+            dom_rec += 25;
+        else
+            rec_rec += 25;
+
+        square_chars = ""
+        is_first_allele_dominant = true
+        is_second_allele_dominant = true
+
+        //Calculate square 3
+        if ($("#m_allele1").prop('checked') == true)
+            square_chars = square_chars + ($("#dominant_allele_char").val())
+        else {
+            square_chars = square_chars + ($("#recessive_allele_char").text())
+            is_first_allele_dominant = false
+        }
+        if ($("#f_allele2").prop('checked') == true)
+            square_chars = ($("#dominant_allele_char").val()) + square_chars
+        else {
+            square_chars = square_chars + ($("#recessive_allele_char").text())
+            is_second_allele_dominant = false
+        }
+        $("#square3").text(square_chars);
+
+        if (is_first_allele_dominant && is_second_allele_dominant)
+            dom_dom += 25;
+        else if (is_first_allele_dominant || is_second_allele_dominant)
+            dom_rec += 25;
+        else
+            rec_rec += 25;
+
+        square_chars = ""
+        is_first_allele_dominant = true
+        is_second_allele_dominant = true
+
+        //Calculate square 4
+        if ($("#m_allele2").prop('checked') == true)
+            square_chars = square_chars + ($("#dominant_allele_char").val())
+        else {
+            square_chars = square_chars + ($("#recessive_allele_char").text())
+            is_first_allele_dominant = false
+        }
+        if ($("#f_allele2").prop('checked') == true)
+            square_chars = ($("#dominant_allele_char").val()) + square_chars
+        else {
+            square_chars = square_chars + ($("#recessive_allele_char").text())
+            is_second_allele_dominant = false
+        }
+        $("#square4").text(square_chars);
+
+        if (is_first_allele_dominant && is_second_allele_dominant)
+            dom_dom += 25;
+        else if (is_first_allele_dominant || is_second_allele_dominant)
+            dom_rec += 25;
+        else
+            rec_rec += 25;
+
+        //$("#square3").text(allele1_char);
+
+        $("#dom_dom_value").text(dom_dom)
+        $("#dom_rec_value").text(dom_rec)
+        $("#rec_rec_value").text(rec_rec)
+
+        $("#dom_pheno_val").text(dom_dom + dom_rec)
+        $("#rec_pheno_val").text(rec_rec)
+
+    }
+
+
+</script>
+
+
+
+</body>
+
+
+
+
+</html>
